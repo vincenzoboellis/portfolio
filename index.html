@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Vincenzo Boellis — Salesforce Marketing Cloud Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sf-blue:#00A1E0;
+    --sf-blue-glow:rgba(0,161,224,.5);
+    --bg:#06080c;
+    --bg-elev:#0b0f16;
+    --bg-card:rgba(255,255,255,.025);
+    --border:rgba(255,255,255,.06);
+    --border-hover:rgba(0,161,224,.3);
+    --text:#f0f2f7;
+    --text-dim:#a5abbd;
+    --text-dimmer:#6b7285;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-0.011em;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:'';
+    position:fixed;
+    top:0;left:0;right:0;
+    height:100vh;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,161,224,.12) 0%,transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 50%,rgba(0,161,224,.05) 0%,transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity:.025;
+    pointer-events:none;
+    z-index:1;
+    mix-blend-mode:overlay;
+  }
+
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:1rem 2rem;
+  }
+  .nav-inner{
+    max-width:1180px;margin:auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem 1.2rem;
+    background:rgba(10,13,20,.6);
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    border:1px solid var(--border);
+    border-radius:100px;
+  }
+  .nav-logo{
+    font-family:'Instrument Serif',serif;
+    font-size:1.35rem;
+    font-weight:400;
+    color:var(--text);
+    letter-spacing:.02em;
+  }
+  .nav-logo em{
+    font-style:italic;
+    color:var(--sf-blue);
+  }
+  .nav-right{
+    display:flex;
+    align-items:center;
+    gap:1.2rem;
+  }
+  .nav-links{display:flex;gap:.3rem;list-style:none;}
+  .nav-links a{
+    color:var(--text-dim);
+    text-decoration:none;
+    font-size:.82rem;
+    font-weight:500;
+    padding:.4rem .85rem;
+    border-radius:100px;
+    transition:all .25s ease;
+  }
+  .nav-links a:hover{color:var(--text);background:rgba(255,255,255,.04);}
+  .nav-cta{
+    background:var(--sf-blue);
+    color:#fff !important;
+    padding:.5rem 1rem !important;
+  }
+  .nav-cta:hover{background:#0085bd !important;}
+
+  /* LANG SWITCHER */
+  .lang-switcher{
+    display:flex;
+    align-items:center;
+    background:rgba(255,255,255,.02);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:3px;
+    gap:2px;
+  }
+  .lang-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    padding:.3rem .7rem;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--text-dim);
+    background:transparent;
+    border:none;
+    border-radius:100px;
+    cursor:pointer;
+    transition:all .2s ease;
+    font-family:inherit;
+    letter-spacing:.04em;
+  }
+  .lang-btn:hover{color:var(--text);}
+  .lang-btn.active{
+    background:rgba(0,161,224,.15);
+    color:var(--sf-blue);
+  }
+  .lang-flag{font-size:.85rem;line-height:1;}
+
+  section{
+    padding:140px 2rem;
+    position:relative;
+    z-index:2;
+  }
+  .container{max-width:1180px;margin:auto;}
+  .section-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--sf-blue);
+    margin-bottom:1.2rem;
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+  }
+  .section-label::before{
+    content:'';
+    width:24px;height:1px;
+    background:var(--sf-blue);
+  }
+  .section-title{
+    font-family:'Instrument Serif',serif;
+    font-size:clamp(2.4rem,4.5vw,3.6rem);
+    font-weight:400;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin-bottom:1.2rem;
+    max-width:800px;
+  }
+  .section-title em{font-style:italic;color:var(--sf-blue);}
+  .section-sub{
+    font-size:1.05rem;
+    color:var(--text-dim);
+    max-width:620px;
+    margin-bottom:4rem;
+  }
+
+  #hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:120px 2rem 80px;
+  }
+  .hero-inner{
+    max-width:1180px;
+    margin:auto;
+    width:100%;
+  }
+  .hero-top{
+    display:flex;
+    align-items:center;
+    gap:2.5rem;
+    margin-bottom:2.4rem;
+  }
+  .hero-photo{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    object-fit:cover;
+    object-position:center top;
+    border:2px solid rgba(0,161,224,.4);
+    box-shadow:0 0 0 4px rgba(0,161,224,.08), 0 8px 32px -8px rgba(0,0,0,.5);
+    flex-shrink:0;
+    filter:grayscale(15%);
+  }
+  .hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+    background:rgba(0,161,224,.08);
+    border:1px solid rgba(0,161,224,.2);
+    border-radius:100px;
+    padding:.4rem 1rem;
+    font-size:.78rem;
+    color:var(--sf-blue);
+    font-weight:500;
+    backdrop-filter:blur(10px);
+  }
+  .hero-badge-dot{
+    width:7px;height:7px;
+    background:var(--sf-blue);
+    border-radius:50%;
+    box-shadow:0 0 12px var(--sf-blue-glow);
+    animation:pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:.5;transform:scale(1.2);}
+  }
+
+  h1{
+    font-family:'Instrument Serif',serif;
+    font-size:clamp(3.5rem,8.5vw,7.5rem);
+    font-weight:400;
+    line-height:.95;
+    letter-spacing:-0.035em;
+    margin-bottom:2rem;
+  }
+  h1 .first-name{
+    display:block;
+    color:var(--text);
+  }
+  h1 .last-name{
+    display:block;
+    font-style:italic;
+    background:linear-gradient(135deg,var(--sf-blue) 0%,#6ad3ff 50%,var(--sf-blue) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-top:-.05em;
+  }
+
+  .hero-title{
+    font-size:1.15rem;
+    color:var(--text-dim);
+    max-width:640px;
+    margin-bottom:1rem;
+    font-weight:400;
+  }
+  .hero-title strong{
+    color:var(--text);
+    font-weight:600;
+  }
+  .hero-sub{
+    font-size:1.02rem;
+    color:var(--text-dimmer);
+    max-width:560px;
+    margin-bottom:2.8rem;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:.8rem;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.85rem 1.6rem;
+    border-radius:100px;
+    font-size:.9rem;
+    font-weight:500;
+    text-decoration:none;
+    transition:all .25s ease;
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+  }
+  .btn-primary{
+    background:var(--sf-blue);
+    color:#fff;
+    box-shadow:0 8px 32px -8px var(--sf-blue-glow);
+  }
+  .btn-primary:hover{
+    background:#0085bd;
+    transform:translateY(-2px);
+    box-shadow:0 12px 40px -8px var(--sf-blue-glow);
+  }
+  .btn-outline{
+    border:1px solid var(--border);
+    color:var(--text);
+    background:rgba(255,255,255,.02);
+    backdrop-filter:blur(10px);
+  }
+  .btn-outline:hover{
+    border-color:rgba(255,255,255,.2);
+    background:rgba(255,255,255,.05);
+  }
+
+  .hero-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    margin-top:5rem;
+    padding-top:2.5rem;
+    border-top:1px solid var(--border);
+  }
+  .stat{padding-right:1.5rem;}
+  .stat-num{
+    font-family:'Instrument Serif',serif;
+    font-size:2.8rem;
+    font-weight:400;
+    color:var(--text);
+    line-height:1;
+    letter-spacing:-0.02em;
+    margin-bottom:.4rem;
+  }
+  .stat-num em{
+    font-style:italic;
+    color:var(--sf-blue);
+  }
+  .stat-label{
+    font-size:.8rem;
+    color:var(--text-dim);
+    line-height:1.4;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:5rem;
+    align-items:start;
+  }
+  .about-text{font-size:1.02rem;color:var(--text-dim);}
+  .about-text p{margin-bottom:1.4rem;}
+  .about-text strong{color:var(--text);font-weight:500;}
+  .about-meta{
+    display:flex;
+    flex-direction:column;
+    gap:.4rem;
+  }
+  .meta-row{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:1rem;
+    padding:1.1rem 0;
+    border-bottom:1px solid var(--border);
+  }
+  .meta-key{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    color:var(--text-dimmer);
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    padding-top:.15rem;
+  }
+  .meta-val{
+    font-size:.9rem;
+    color:var(--text);
+  }
+  .meta-val small{
+    display:block;
+    color:var(--text-dim);
+    font-size:.8rem;
+    margin-top:.2rem;
+  }
+
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1rem;
+  }
+  .svc-card{
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:2rem 1.8rem;
+    transition:all .3s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .svc-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--sf-blue),transparent);
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .svc-card:hover{
+    border-color:var(--border-hover);
+    transform:translateY(-3px);
+    background:rgba(0,161,224,.03);
+  }
+  .svc-card:hover::before{opacity:1;}
+  .svc-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    color:var(--sf-blue);
+    margin-bottom:1.2rem;
+    letter-spacing:.1em;
+  }
+  .svc-card h3{
+    font-family:'Instrument Serif',serif;
+    font-size:1.4rem;
+    font-weight:400;
+    margin-bottom:.8rem;
+    color:var(--text);
+    letter-spacing:-0.01em;
+  }
+  .svc-card p{
+    font-size:.88rem;
+    color:var(--text-dim);
+    line-height:1.6;
+  }
+
+  .skills-wrap{border-top:1px solid var(--border);}
+  .skills-block{
+    padding:2.5rem 0;
+    border-bottom:1px solid var(--border);
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:3rem;
+    align-items:start;
+  }
+  .skills-block-title{
+    font-family:'Instrument Serif',serif;
+    font-size:1.2rem;
+    font-weight:400;
+    color:var(--text);
+    font-style:italic;
+  }
+  .skills-block-title small{
+    display:block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;
+    color:var(--text-dimmer);
+    font-style:normal;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:.4rem;
+  }
+  .pills{display:flex;flex-wrap:wrap;gap:.5rem;}
+  .pill{
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:.42rem 1rem;
+    font-size:.82rem;
+    color:var(--text-dim);
+    transition:all .2s ease;
+  }
+  .pill:hover{
+    color:var(--text);
+    border-color:var(--border-hover);
+    background:rgba(0,161,224,.05);
+  }
+
+  .timeline{position:relative;}
+  .tl-item{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:3rem;
+    padding:2.2rem 0;
+    border-bottom:1px solid var(--border);
+    transition:all .3s ease;
+  }
+  .tl-item:first-child{border-top:1px solid var(--border);}
+  .tl-item:hover{background:rgba(255,255,255,.01);}
+  .tl-period{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.75rem;
+    color:var(--sf-blue);
+    letter-spacing:.08em;
+    padding-top:.3rem;
+  }
+  .tl-role{
+    font-family:'Instrument Serif',serif;
+    font-size:1.5rem;
+    font-weight:400;
+    letter-spacing:-0.01em;
+    margin-bottom:.3rem;
+    color:var(--text);
+  }
+  .tl-company{
+    font-size:.85rem;
+    color:var(--sf-blue);
+    margin-bottom:.8rem;
+    font-weight:500;
+  }
+  .tl-desc{
+    font-size:.92rem;
+    color:var(--text-dim);
+    max-width:620px;
+    line-height:1.65;
+  }
+
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5rem;
+  }
+  .certs-list{display:flex;flex-direction:column;gap:.2rem;}
+  .cert-item{
+    display:grid;
+    grid-template-columns:1fr auto;
+    padding:1.1rem 0;
+    border-bottom:1px solid var(--border);
+    align-items:center;
+    transition:padding .2s ease;
+  }
+  .cert-item:hover{padding-left:.8rem;}
+  .cert-name{font-size:.95rem;color:var(--text);font-weight:500;}
+  .cert-name small{
+    display:block;
+    color:var(--text-dim);
+    font-size:.78rem;
+    font-weight:400;
+    margin-top:.15rem;
+  }
+  .cert-year{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    color:var(--text-dimmer);
+    letter-spacing:.05em;
+  }
+  .ind-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:.5rem;
+  }
+  .ind-item{
+    padding:1.1rem 1.3rem;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    font-size:.85rem;
+    color:var(--text);
+    transition:all .2s ease;
+  }
+  .ind-item:hover{
+    border-color:var(--border-hover);
+    background:rgba(0,161,224,.03);
+    transform:translateY(-2px);
+  }
+  .ind-item small{
+    display:block;
+    color:var(--text-dimmer);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    margin-bottom:.25rem;
+  }
+
+  .test-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1rem;
+  }
+  .test-card{
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.8rem;
+    transition:all .3s ease;
+    display:flex;
+    flex-direction:column;
+  }
+  .test-card:hover{
+    border-color:var(--border-hover);
+    transform:translateY(-2px);
+  }
+  .test-quote{
+    font-family:'Instrument Serif',serif;
+    font-size:2rem;
+    color:var(--sf-blue);
+    line-height:0;
+    opacity:.6;
+    margin-bottom:.8rem;
+    font-style:italic;
+  }
+  .test-text{
+    font-size:.9rem;
+    color:var(--text-dim);
+    line-height:1.65;
+    flex:1;
+    margin-bottom:1.4rem;
+  }
+  .test-divider{
+    height:1px;
+    background:var(--border);
+    margin-bottom:1rem;
+  }
+  .test-author{
+    font-size:.88rem;
+    color:var(--text);
+    font-weight:500;
+  }
+  .test-role{
+    font-size:.76rem;
+    color:var(--text-dimmer);
+    margin-top:.2rem;
+  }
+
+  .project-card{
+    background:linear-gradient(135deg,rgba(0,161,224,.06) 0%,rgba(255,255,255,.02) 100%);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:3.5rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .project-card::before{
+    content:'';
+    position:absolute;
+    top:-50%;right:-20%;
+    width:500px;height:500px;
+    background:radial-gradient(circle,rgba(0,161,224,.15) 0%,transparent 70%);
+    filter:blur(60px);
+    z-index:0;
+  }
+  .project-inner{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:3rem;
+    align-items:center;
+  }
+  .proj-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    background:rgba(0,161,224,.1);
+    border:1px solid rgba(0,161,224,.25);
+    color:var(--sf-blue);
+    border-radius:100px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    letter-spacing:.1em;
+    padding:.3rem .8rem;
+    margin-bottom:1.5rem;
+  }
+  .project-inner h3{
+    font-family:'Instrument Serif',serif;
+    font-size:2.2rem;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    line-height:1.1;
+    margin-bottom:1.2rem;
+  }
+  .project-inner h3 em{font-style:italic;color:var(--sf-blue);}
+  .project-inner .proj-desc{
+    font-size:.95rem;
+    color:var(--text-dim);
+    margin-bottom:1.8rem;
+    line-height:1.7;
+  }
+  .proj-pills{
+    display:flex;
+    gap:.4rem;
+    flex-wrap:wrap;
+    margin-bottom:2rem;
+  }
+  .proj-pill{
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:.3rem .8rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    color:var(--text-dim);
+    letter-spacing:.03em;
+  }
+  .proj-mockup{
+    background:#0d1118;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.2rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.75rem;
+    color:var(--text-dim);
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.5);
+  }
+  .mock-dots{display:flex;gap:.35rem;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);}
+  .mock-dots span{width:10px;height:10px;border-radius:50%;}
+  .mock-dots span:nth-child(1){background:#ff5f57;}
+  .mock-dots span:nth-child(2){background:#febc2e;}
+  .mock-dots span:nth-child(3){background:#28c840;}
+  .mock-line{margin-bottom:.35rem;}
+  .mock-k{color:#ff79c6;}
+  .mock-s{color:#50fa7b;}
+  .mock-c{color:var(--text-dimmer);}
+
+  #contact{padding:160px 2rem 100px;}
+  .contact-card{
+    background:linear-gradient(135deg,rgba(0,161,224,.08) 0%,rgba(255,255,255,.02) 100%);
+    border:1px solid rgba(0,161,224,.15);
+    border-radius:32px;
+    padding:5rem 3rem;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .contact-card::before{
+    content:'';
+    position:absolute;
+    top:-100%;left:50%;
+    transform:translateX(-50%);
+    width:600px;height:600px;
+    background:radial-gradient(circle,rgba(0,161,224,.15) 0%,transparent 70%);
+    filter:blur(60px);
+  }
+  .contact-inner-wrap{position:relative;z-index:1;}
+  .contact-title{
+    font-family:'Instrument Serif',serif;
+    font-size:clamp(2.5rem,5vw,4rem);
+    font-weight:400;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin-bottom:1.5rem;
+  }
+  .contact-title em{font-style:italic;color:var(--sf-blue);}
+  .contact-sub{
+    font-size:1.05rem;
+    color:var(--text-dim);
+    max-width:520px;
+    margin:0 auto 3rem;
+  }
+  .contact-email{
+    font-family:'Instrument Serif',serif;
+    font-size:2rem;
+    color:var(--text);
+    text-decoration:none;
+    border-bottom:1px solid var(--border);
+    padding-bottom:.6rem;
+    display:inline-block;
+    margin-bottom:2.5rem;
+    transition:all .25s ease;
+    letter-spacing:-0.01em;
+  }
+  .contact-email:hover{
+    color:var(--sf-blue);
+    border-color:var(--sf-blue);
+  }
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:.8rem;
+    flex-wrap:wrap;
+  }
+  .contact-link{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.7rem 1.3rem;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.02);
+    backdrop-filter:blur(10px);
+    border-radius:100px;
+    color:var(--text-dim);
+    text-decoration:none;
+    font-size:.85rem;
+    font-weight:500;
+    transition:all .25s ease;
+  }
+  .contact-link:hover{
+    border-color:var(--border-hover);
+    color:var(--text);
+    transform:translateY(-1px);
+  }
+
+  footer{
+    padding:3rem 2rem;
+    text-align:center;
+    border-top:1px solid var(--border);
+    font-size:.8rem;
+    color:var(--text-dimmer);
+    position:relative;
+    z-index:2;
+  }
+  footer a{color:var(--sf-blue);text-decoration:none;}
+
+  /* Language visibility */
+  [data-lang-it], [data-lang-en]{display:none;}
+  html[lang="it"] [data-lang-it]{display:inline;}
+  html[lang="en"] [data-lang-en]{display:inline;}
+  html[lang="it"] [data-lang-it].block{display:block;}
+  html[lang="en"] [data-lang-en].block{display:block;}
+
+  @media(max-width:900px){
+    section{padding:100px 1.5rem;}
+    .nav-links{display:none;}
+    .nav-cta{display:inline-flex !important;}
+    .about-grid,.two-col,.project-inner{grid-template-columns:1fr;gap:3rem;}
+    .services-grid,.test-grid{grid-template-columns:1fr;}
+    .skills-block{grid-template-columns:1fr;gap:1rem;}
+    .tl-item{grid-template-columns:1fr;gap:.6rem;}
+    .hero-stats{grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+    .stat{padding-right:0;}
+    .ind-grid{grid-template-columns:1fr;}
+    .project-card{padding:2rem;}
+    .proj-mockup{display:none;}
+    .contact-card{padding:3rem 1.5rem;}
+    .contact-email{font-size:1.3rem;}
+    .lang-btn{padding:.25rem .5rem;font-size:.68rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">Vincenzo <em>Boellis</em></span>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about"><span data-lang-it>Chi sono</span><span data-lang-en>About</span></a></li>
+        <li><a href="#services"><span data-lang-it>Servizi</span><span data-lang-en>Services</span></a></li>
+        <li><a href="#skills"><span data-lang-it>Expertise</span><span data-lang-en>Expertise</span></a></li>
+        <li><a href="#experience"><span data-lang-it>Experience</span><span data-lang-en>Experience</span></a></li>
+        <li><a href="#testimonials"><span data-lang-it>Reviews</span><span data-lang-en>Reviews</span></a></li>
+        <li><a href="#project"><span data-lang-it>Open Source</span><span data-lang-en>Open Source</span></a></li>
+        <li><a href="#contact" class="nav-cta"><span data-lang-it>Contatti</span><span data-lang-en>Contact</span></a></li>
+      </ul>
+      <div class="lang-switcher" role="group" aria-label="Language selector">
+        <button class="lang-btn active" data-lang-set="it" aria-label="Italiano">IT</button>
+        <button class="lang-btn" data-lang-set="en" aria-label="English">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <img src="pic.png" alt="Vincenzo Boellis" class="hero-photo"/>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span data-lang-it>Disponibile per nuovi progetti · 2026</span>
+        <span data-lang-en>Available for new projects · 2026</span>
+      </div>
+    </div>
+    <h1>
+      <span class="first-name">Vincenzo</span>
+      <span class="last-name">Boellis</span>
+    </h1>
+    <p class="hero-title">
+      <strong>Salesforce Marketing Cloud</strong>
+      <span data-lang-it>Technical & Solution Architect</span>
+      <span data-lang-en>Technical & Solution Architect</span>
+    </p>
+    <p class="hero-sub">
+      <span data-lang-it>Freelance con oltre 8 anni nell'ecosistema Salesforce. Trasformo la complessità di Salesforce Marketing Cloud in architetture solide, campagne performanti e team autonomi.</span>
+      <span data-lang-en>Freelance consultant with 8+ years in the Salesforce ecosystem. I turn the complexity of Salesforce Marketing Cloud into solid architectures, high-performing campaigns, and autonomous teams.</span>
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary">
+        <span data-lang-it>Parliamo del tuo progetto →</span>
+        <span data-lang-en>Let's talk about your project →</span>
+      </a>
+      <a href="#services" class="btn btn-outline">
+        <span data-lang-it>Scopri i servizi</span>
+        <span data-lang-en>Explore services</span>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num"><em>20</em>+</div>
+        <div class="stat-label">
+          <span data-lang-it>Progetti Salesforce consegnati</span>
+          <span data-lang-en>Salesforce projects delivered</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><em>8</em>+</div>
+        <div class="stat-label">
+          <span data-lang-it>Anni di esperienza</span>
+          <span data-lang-en>Years of experience</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><em>4</em></div>
+        <div class="stat-label">
+          <span data-lang-it>Corsi di formazione SFMC</span>
+          <span data-lang-en>SFMC training courses delivered</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><em>8</em>+</div>
+        <div class="stat-label">
+          <span data-lang-it>Industry coperte</span>
+          <span data-lang-en>Industries covered</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <p class="section-label"><span data-lang-it>Chi sono</span><span data-lang-en>About</span></p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Competenza tecnica profonda,<br/>comunicazione <em>chiara</em>.</span>
+      <span data-lang-en class="block">Deep technical expertise,<br/><em>clear</em> communication.</span>
+    </h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <div data-lang-it class="block">
+          <p>Dal 2017 lavoro nell'ecosistema Salesforce. Ho iniziato come Analyst su Sales e Service Cloud per clienti Telco e Media, poi mi sono progressivamente specializzato su <strong>Marketing Cloud Engagement</strong>, costruendo una expertise end-to-end che copre Engagement, Intelligence, Data Cloud, Personalization e Next.</p>
+          <p>Ho attraversato realtà come <strong>Accenture</strong> e <strong>Lutech</strong> come consulente interno, e <strong>NTT Data</strong> e <strong>Deloitte</strong> come consulente esterno, guidando team, architettando soluzioni enterprise e facendo da Subject Matter Expert su MC Intelligence. Dal 2023 opero come freelance, scegliendo progetti in cui la profondità tecnica conta davvero.</p>
+          <p>Quello che mi distingue — e lo dicono i clienti — è la capacità di <strong>unire una padronanza tecnica di alto livello a una comunicazione empatica</strong>. Spiegare argomenti complessi con semplicità, rispondere a ogni domanda, adattarmi al livello del team.</p>
+        </div>
+        <div data-lang-en class="block">
+          <p>Since 2017 I have been working in the Salesforce ecosystem. I started as an Analyst on Sales and Service Cloud for Telco and Media clients, then progressively specialized in <strong>Marketing Cloud Engagement</strong>, building an end-to-end expertise that covers Engagement, Intelligence, Data Cloud, Personalization and Next.</p>
+          <p>I worked at companies like <strong>Accenture</strong> and <strong>Lutech</strong> as an internal consultant, and <strong>NTT Data</strong> and <strong>Deloitte</strong> as an external consultant, leading teams, architecting enterprise solutions and serving as Subject Matter Expert on MC Intelligence. Since 2023 I operate as a freelancer, choosing projects where technical depth truly matters.</p>
+          <p>What sets me apart — and my clients say it — is the ability to <strong>combine high-level technical mastery with empathetic communication</strong>. Explaining complex topics with simplicity, answering every question, adapting to the team's level.</p>
+        </div>
+      </div>
+      <div class="about-meta">
+        <div class="meta-row">
+          <div class="meta-key">Location</div>
+          <div class="meta-val">
+            <span data-lang-it>Caserta, Italia<small>Disponibile da remoto, nazionale e internazionale</small></span>
+            <span data-lang-en>Caserta, Italy<small>Available remotely, both locally and internationally</small></span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-key"><span data-lang-it>Formazione</span><span data-lang-en>Education</span></div>
+          <div class="meta-val">
+            <span data-lang-it>ELIS ICT Academy<small>Vocational Master in Salesforce Development & Cloud Services</small></span>
+            <span data-lang-en>ELIS ICT Academy<small>Vocational Master in Salesforce Development & Cloud Services</small></span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-key"><span data-lang-it>Lingue</span><span data-lang-en>Languages</span></div>
+          <div class="meta-val">
+            <span data-lang-it>IT · EN · FR · ES<small>Italiano madrelingua, inglese professionale</small></span>
+            <span data-lang-en>IT · EN · FR · ES<small>Italian native, professional English</small></span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-key">Trailhead</div>
+          <div class="meta-val"><a href="https://trailblazer.me/id/vincenzoboellis" target="_blank" style="color:var(--sf-blue);text-decoration:none;">Ranger · Agentblazer Champion ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <p class="section-label"><span data-lang-it>Servizi</span><span data-lang-en>Services</span></p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Dalla strategia<br/>all'<em>esecuzione</em>.</span>
+      <span data-lang-en class="block">From strategy<br/>to <em>execution</em>.</span>
+    </h2>
+    <p class="section-sub">
+      <span data-lang-it>Sei aree di intervento per trasformare il Marketing di Salesforce in un vantaggio competitivo concreto, non uno strumento da gestire ma una leva da sfruttare.</span>
+      <span data-lang-en>Six areas of intervention to turn Salesforce Marketing into a concrete competitive advantage — not a tool to manage but a lever to leverage.</span>
+    </p>
+    <div class="services-grid">
+      <div class="svc-card">
+        <div class="svc-num">01 / Consulting</div>
+        <h3><span data-lang-it>Strategia & Architettura</span><span data-lang-en>Strategy & Architecture</span></h3>
+        <p>
+          <span data-lang-it>Analisi del contesto, definizione della roadmap SFMC, design dell'architettura della soluzione e supporto decisionale per C-level e team marketing.</span>
+          <span data-lang-en>Context analysis, SFMC roadmap definition, solution architecture design and decision support for C-level and marketing teams.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">02 / Delivery</div>
+        <h3><span data-lang-it>Implementazione</span><span data-lang-en>Implementation</span></h3>
+        <p>
+          <span data-lang-it>Setup e configurazione di Marketing Cloud Engagement, Intelligence, Data Cloud e Personalization. Campagne, automazioni e Journey Builder enterprise-ready.</span>
+          <span data-lang-en>Setup and configuration of Marketing Cloud Engagement, Intelligence, Data Cloud and Personalization. Enterprise-ready campaigns, automations and Journey Builder.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">03 / Integration</div>
+        <h3><span data-lang-it>Sistemi & API</span><span data-lang-en>Systems & API</span></h3>
+        <p>
+          <span data-lang-it>Integrazione SFMC con Salesforce CRM via Marketing Cloud Connect, connessione con sistemi esterni tramite REST/SOAP, sviluppo in AMPscript, SSJS, Python.</span>
+          <span data-lang-en>SFMC integration with Salesforce CRM via Marketing Cloud Connect, connection with external systems via REST/SOAP, development in AMPscript, SSJS, Python.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">04 / Analytics</div>
+        <h3><span data-lang-it>Reporting & BI</span><span data-lang-en>Reporting & BI</span></h3>
+        <p>
+          <span data-lang-it>Dashboard avanzate su MC Intelligence (formerly Datorama), data stream, armonizzazione cross-platform, reporting personalizzato per decision maker.</span>
+          <span data-lang-en>Advanced dashboards on MC Intelligence (formerly Datorama), data streams, cross-platform harmonization, custom reporting for decision makers.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">05 / Training</div>
+        <h3><span data-lang-it>Formazione</span><span data-lang-en>Training</span></h3>
+        <p>
+          <span data-lang-it>Corsi SFMC tailor-made per team marketing e tecnici. Approccio pratico, concreto, modellato sul livello del gruppo. Feedback costantemente eccellenti.</span>
+          <span data-lang-en>Tailor-made SFMC courses for marketing and technical teams. Practical, concrete approach, shaped to the team's level. Consistently excellent feedback.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">06 / Optimization</div>
+        <h3><span data-lang-it>Audit & Performance</span><span data-lang-en>Audit & Performance</span></h3>
+        <p>
+          <span data-lang-it>Revisione di configurazioni esistenti, ottimizzazione di journey e automazioni, miglioramento di performance email, deliverability e costi operativi.</span>
+          <span data-lang-en>Review of existing configurations, optimization of journeys and automations, improvement of email performance, deliverability and operational costs.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <p class="section-label">Expertise</p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Lo stack <em>completo</em>.</span>
+      <span data-lang-en class="block">The <em>complete</em> stack.</span>
+    </h2>
+    <p class="section-sub">
+      <span data-lang-it>Oltre otto anni di lavoro sul campo su ogni angolo dell'ecosistema Salesforce, con focus verticale su Marketing Cloud.</span>
+      <span data-lang-en>Over eight years of hands-on work across every corner of the Salesforce ecosystem, with a vertical focus on Marketing Cloud.</span>
+    </p>
+    <div class="skills-wrap">
+      <div class="skills-block">
+        <div class="skills-block-title">Marketing Cloud<br/><em>Engagement</em><small>Core platform</small></div>
+        <div class="pills">
+          <span class="pill">Journey Builder</span><span class="pill">Automation Studio</span><span class="pill">Email Studio</span><span class="pill">Content Builder</span><span class="pill">AMPscript</span><span class="pill">SSJS</span><span class="pill">SQL</span><span class="pill">HTML / CSS</span><span class="pill">SMS & Push</span><span class="pill">Einstein Engagement</span><span class="pill">Package Manager</span><span class="pill">API Events (SDE)</span><span class="pill">Data Extensions</span>
+        </div>
+      </div>
+      <div class="skills-block">
+        <div class="skills-block-title">Marketing Cloud<br/><em>Intelligence</em><small>formerly Datorama</small></div>
+        <div class="pills">
+          <span class="pill">TotalConnect</span><span class="pill">LiteConnect</span><span class="pill">Vendor Connectors</span><span class="pill">Workflows</span><span class="pill">Harmonization</span><span class="pill">Classifications</span><span class="pill">Calculated Metrics</span><span class="pill">Pivot Tables</span><span class="pill">Custom Dashboards</span>
+        </div>
+      </div>
+      <div class="skills-block">
+        <div class="skills-block-title">Salesforce<br/><em>Platform</em><small>broader ecosystem</small></div>
+        <div class="pills">
+          <span class="pill">MC Next</span><span class="pill">Data Cloud</span><span class="pill">Personalization</span><span class="pill">Sales Cloud</span><span class="pill">Service Cloud</span><span class="pill">Community Cloud</span><span class="pill">Agentforce Marketing</span>
+        </div>
+      </div>
+      <div class="skills-block">
+        <div class="skills-block-title">Development<br/><em>& Integration</em><small>under the hood</small></div>
+        <div class="pills">
+          <span class="pill">REST API</span><span class="pill">SOAP API</span><span class="pill">Python</span><span class="pill">SQL</span><span class="pill">SSJS</span><span class="pill">AMPscript</span><span class="pill">JavaScript</span><span class="pill">Chrome Extension Dev</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <p class="section-label"><span data-lang-it>Percorso</span><span data-lang-en>Career</span></p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Otto anni,<br/>un'<em>unica direzione</em>.</span>
+      <span data-lang-en class="block">Eight years,<br/><em>one direction</em>.</span>
+    </h2>
+    <p class="section-sub">
+      <span data-lang-it>Un percorso graduale da Analyst a Solution Architect, attraverso consulenza enterprise e ora freelance su progetti sfidanti.</span>
+      <span data-lang-en>A gradual path from Analyst to Solution Architect, through enterprise consulting and now freelance on challenging projects.</span>
+    </p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>OTT 2023 — OGGI</span><span data-lang-en>OCT 2023 — PRESENT</span></div>
+        <div>
+          <div class="tl-role"><span data-lang-it>Freelance SFMC Technical & Solution Architect</span><span data-lang-en>Freelance SFMC Technical & Solution Architect</span></div>
+          <div class="tl-company"><span data-lang-it>Indipendente · Remoto</span><span data-lang-en>Independent · Remote</span></div>
+          <div class="tl-desc">
+            <span data-lang-it>Consulenza, implementazione e formazione su Marketing Cloud Engagement, Intelligence, Next e Data Cloud. Clienti cross-industry con approccio tailor-made e focus sulla qualità della delivery.</span>
+            <span data-lang-en>Consulting, implementation and training on Marketing Cloud Engagement, Intelligence, Next and Data Cloud. Cross-industry clients with a tailor-made approach and focus on delivery quality.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>GIU 2022 — APR 2023</span><span data-lang-en>JUN 2022 — APR 2023</span></div>
+        <div>
+          <div class="tl-role">Salesforce Associate Manager</div>
+          <div class="tl-company">Lutech · Milano</div>
+          <div class="tl-desc">
+            <span data-lang-it>Gestione di progetti SFMC enterprise per clienti Fashion & Retail, Banking, Healthcare. Piattaforme: MC Intelligence, Engagement, Personalization, Data Cloud.</span>
+            <span data-lang-en>Management of enterprise SFMC projects for Fashion & Retail, Banking, Healthcare clients. Platforms: MC Intelligence, Engagement, Personalization, Data Cloud.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>GIU 2021 — MAG 2022</span><span data-lang-en>JUN 2021 — MAY 2022</span></div>
+        <div>
+          <div class="tl-role">SFMC Team Lead & MC Intelligence SME</div>
+          <div class="tl-company">Accenture · Roma</div>
+          <div class="tl-desc">
+            <span data-lang-it>Leadership tecnica del team SFMC. Subject Matter Expert su Marketing Cloud Intelligence. Delivery per clienti Energy & Utilities, Banking, Non Profit.</span>
+            <span data-lang-en>Technical leadership of the SFMC team. Subject Matter Expert on Marketing Cloud Intelligence. Delivery for Energy & Utilities, Banking, Non Profit clients.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>APR 2020 — GIU 2021</span><span data-lang-en>APR 2020 — JUN 2021</span></div>
+        <div>
+          <div class="tl-role">SFMC Senior Analyst</div>
+          <div class="tl-company">Accenture · Roma</div>
+          <div class="tl-desc">
+            <span data-lang-it>Implementazione e gestione di campagne e automazioni per clienti Fashion & Retail, Energy & Utilities, Banking e Healthcare.</span>
+            <span data-lang-en>Implementation and management of campaigns and automations for Fashion & Retail, Energy & Utilities, Banking and Healthcare clients.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>GIU 2018 — APR 2019</span><span data-lang-en>JUN 2018 — APR 2019</span></div>
+        <div>
+          <div class="tl-role">Salesforce Senior Analyst</div>
+          <div class="tl-company">KeyBiz · ext. WebResults / NTT Data · Roma</div>
+          <div class="tl-desc">
+            <span data-lang-it>Salesforce CRM su Sales, Service e Community Cloud per clienti Infrastructures ed Energy & Utilities.</span>
+            <span data-lang-en>Salesforce CRM across Sales, Service and Community Cloud for Infrastructures and Energy & Utilities clients.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-period"><span data-lang-it>DIC 2017 — MAG 2018</span><span data-lang-en>DEC 2017 — MAY 2018</span></div>
+        <div>
+          <div class="tl-role">Salesforce Analyst</div>
+          <div class="tl-company">Investech · ext. Deloitte / Sky Italy · Roma</div>
+          <div class="tl-desc">
+            <span data-lang-it>Primo ruolo post-Master ELIS. Salesforce CRM Sales e Service per clienti Telco e Media & Entertainment.</span>
+            <span data-lang-en>First role after ELIS Master. Salesforce CRM Sales and Service for Telco and Media & Entertainment clients.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <p class="section-label"><span data-lang-it>Certificazioni</span><span data-lang-en>Certifications</span></p>
+        <h2 class="section-title" style="font-size:2.4rem;">
+          <span data-lang-it class="block">Salesforce<br/><em>Certified</em>.</span>
+          <span data-lang-en class="block">Salesforce<br/><em>Certified</em>.</span>
+        </h2>
+        <div class="certs-list" style="margin-top:2rem;">
+          <div class="cert-item">
+            <div class="cert-name">Agentblazer Innovator & Champion<small>Salesforce</small></div>
+            <div class="cert-year"><span data-lang-it>NOV 2025</span><span data-lang-en>NOV 2025</span></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-name">Complete Admin + AI<small>Udemy</small></div>
+            <div class="cert-year"><span data-lang-it>AGO 2024</span><span data-lang-en>AUG 2024</span></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-name">MC Administrator<small>Salesforce</small></div>
+            <div class="cert-year"><span data-lang-it>APR 2021</span><span data-lang-en>APR 2021</span></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-name">MC Email Specialist<small>Salesforce</small></div>
+            <div class="cert-year"><span data-lang-it>MAG 2020</span><span data-lang-en>MAY 2020</span></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-name">Platform Developer I<small>Salesforce</small></div>
+            <div class="cert-year"><span data-lang-it>NOV 2017</span><span data-lang-en>NOV 2017</span></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-name">Salesforce Administrator<small>Salesforce</small></div>
+            <div class="cert-year"><span data-lang-it>AGO 2017</span><span data-lang-en>AUG 2017</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="section-label">Industry</p>
+        <h2 class="section-title" style="font-size:2.4rem;">
+          <span data-lang-it class="block">Settori in cui<br/>ho <em>costruito</em>.</span>
+          <span data-lang-en class="block">Industries where<br/>I've <em>built</em>.</span>
+        </h2>
+        <div class="ind-grid" style="margin-top:2rem;">
+          <div class="ind-item"><small>01</small>Energy & Utilities</div>
+          <div class="ind-item"><small>02</small>Banking</div>
+          <div class="ind-item"><small>03</small>Healthcare & Life Sci.</div>
+          <div class="ind-item"><small>04</small>Fashion & Retail</div>
+          <div class="ind-item"><small>05</small>Telco</div>
+          <div class="ind-item"><small>06</small>Media & Entertainment</div>
+          <div class="ind-item"><small>07</small>Non Profit</div>
+          <div class="ind-item"><small>08</small>Infrastructures</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="container">
+    <p class="section-label"><span data-lang-it>Testimonianze</span><span data-lang-en>Testimonials</span></p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Le parole dei<br/><em>clienti</em>.</span>
+      <span data-lang-en class="block">What <em>clients</em><br/>say.</span>
+    </h2>
+    <p class="section-sub">
+      <span data-lang-it>Estratti da recensioni verificate su LinkedIn. Tutti i feedback sono visibili sul profilo pubblico.</span>
+      <span data-lang-en>Excerpts from verified reviews on LinkedIn. All feedback is visible on the public profile.</span>
+    </p>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Vincenzo unisce una profonda competenza tecnica alla capacità comunicativa: riesce a spiegare in modo chiaro anche i concetti più complessi. Un professionista preparato, empatico e appassionato: collaborare con lui è stato davvero un valore aggiunto.</span>
+          <span data-lang-en>Vincenzo combines deep technical expertise with strong communication skills: he manages to explain even the most complex concepts clearly. A prepared, empathetic and passionate professional — collaborating with him was truly a value added.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Eleonora Andolfo</div>
+        <div class="test-role">Marketing Automation Specialist</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Ciò che apprezzo di più è la sua capacità di unire competenza tecnica di alto livello a una comunicazione chiara, empatica e coinvolgente. Riuscire a spiegare argomenti complessi con semplicità, e allo stesso tempo con simpatia, non è da tutti.</span>
+          <span data-lang-en>What I appreciate most is his ability to combine high-level technical expertise with clear, empathetic and engaging communication. Being able to explain complex topics with simplicity, and at the same time with warmth, is not something everyone can do.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Anna Camposeo</div>
+        <div class="test-role">Marketing Automation Specialist</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Ha dimostrato una grande padronanza dello strumento e una disponibilità fuori dal comune: nessuna domanda è rimasta senza risposta. Un corso utile, ben strutturato e soprattutto ben condotto.</span>
+          <span data-lang-en>He demonstrated great mastery of the tool and extraordinary availability: no question went unanswered. A useful, well-structured and above all well-conducted course.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Andrea Redi</div>
+        <div class="test-role">Ebusiness Strategist & Marketing Automation</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Un freelance esperto e competente, con una conoscenza approfondita non solo delle piattaforme Salesforce ma anche delle ultime novità tecnologiche. Lo consiglio non solo come trainer ma anche come mentor per chiunque cerchi un esperto Salesforce.</span>
+          <span data-lang-en>An expert and competent freelancer, with deep knowledge not only of Salesforce platforms but also of the latest technological advances. I recommend him not only as a trainer but also as a mentor for anyone looking for a Salesforce expert.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Eleonora Mistro</div>
+        <div class="test-role">Career Coach · LinkedIn Branding</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Vincenzo sa comunicare in modo efficace argomenti complessi e trasmette la passione che ha per il suo lavoro. Molto chiaro nell'esposizione e sempre disponibile, pronto a spiegare di nuovo se qualcosa non è chiaro.</span>
+          <span data-lang-en>Vincenzo knows how to effectively communicate complex topics and conveys the passion he has for his work. Very clear in his explanations and always available, ready to explain again if something is unclear.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Luana Elia</div>
+        <div class="test-role">Full Stack Recruiter</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Un eccellente formatore in Marketing Cloud e Salesforce. Risponde sempre in modo puntuale e dettagliato ad ogni singolo quesito. Riesce sempre a metterti a tuo agio: è un requisito non banale per chi si occupa di formazione.</span>
+          <span data-lang-en>An excellent trainer in Marketing Cloud and Salesforce. He always answers every single question promptly and in detail. He always manages to put you at ease — it's a non-trivial requirement for those who do training.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Irma Montemaggiore</div>
+        <div class="test-role">Consulente Salesforce</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Vincenzo è stato uno dei docenti di un corso dedicato alle figure di Recruiting in ambito Tech. La sua professionalità e dedizione nel proporsi, ideare un iter formativo strutturato e tailor made e nell'esposizione del modulo è stata vincente, chiara e professionale.</span>
+          <span data-lang-en>Vincenzo was one of the instructors of a course dedicated to Recruiting figures in the Tech field. His professionalism and dedication in presenting himself, designing a structured and tailor-made training path, and in delivering the module was successful, clear and professional.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Guido Penta</div>
+        <div class="test-role">Chief Recruiting Officer</div>
+      </div>
+      <div class="test-card">
+        <div class="test-quote">"</div>
+        <p class="test-text">
+          <span data-lang-it>Vincenzo è stato il mio formatore durante un corso di Salesforce Marketing Cloud, dimostrando una profonda competenza nel campo. La sua disponibilità nel rispondere a qualsiasi domanda e la capacità di creare un ambiente accogliente hanno reso l'esperienza formativa altamente efficace.</span>
+          <span data-lang-en>Vincenzo was my trainer during a Salesforce Marketing Cloud course, demonstrating deep expertise in the field. His willingness to answer any question and his ability to create a welcoming environment made the training experience highly effective.</span>
+        </p>
+        <div class="test-divider"></div>
+        <div class="test-author">Giulia Navarro Pereira</div>
+        <div class="test-role">Salesforce Marketing Consultant</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project">
+  <div class="container">
+    <p class="section-label">Open Source</p>
+    <h2 class="section-title">
+      <span data-lang-it class="block">Progetti <em>personali</em>.</span>
+      <span data-lang-en class="block">Personal <em>projects</em>.</span>
+    </h2>
+    <div class="project-card">
+      <div class="project-inner">
+        <div>
+          <span class="proj-tag">CHROME EXTENSION · PUBLIC</span>
+          <h3>SFMC <em>Inspector</em></h3>
+          <p class="proj-desc">
+            <span data-lang-it>Una Chrome Extension costruita da zero per potenziare il workflow dei professionisti SFMC. Esplora Data Extensions in parallelo, mappa Automazioni e Journey, valida SQL e AMPScript con linter integrati, cerca globalmente nell'org con un comando <strong style="color:var(--text);">⌘K</strong>. Autenticazione via proxy session-based, senza credenziali esplicite.</span>
+            <span data-lang-en>A Chrome Extension built from scratch to empower the SFMC professional workflow. Explore Data Extensions in parallel, map Automations and Journeys, validate SQL and AMPScript with built-in linters, search globally across the org with a <strong style="color:var(--text);">⌘K</strong> command. Session-based proxy authentication, no explicit credentials required.</span>
+          </p>
+          <div class="proj-pills">
+            <span class="proj-pill">Chrome Extension</span>
+            <span class="proj-pill">JavaScript</span>
+            <span class="proj-pill">SFMC REST API</span>
+            <span class="proj-pill">SQL Linter</span>
+            <span class="proj-pill">AMPScript Linter</span>
+            <span class="proj-pill">Journey Mapping</span>
+          </div>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+            <a href="https://github.com/TokyoYugen/sfmc-inspector" target="_blank" class="btn btn-outline" style="font-size:.82rem;padding:.65rem 1.2rem;">★ View on GitHub</a>
+            <a href="https://tokyoyugen.github.io/sfmc-inspector/sfmc-inspector/privacy-policy.html" target="_blank" class="btn btn-outline" style="font-size:.82rem;padding:.65rem 1.2rem;">Privacy Policy</a>
+          </div>
+        </div>
+        <div class="proj-mockup">
+          <div class="mock-dots"><span></span><span></span><span></span></div>
+          <div class="mock-line"><span class="mock-c">// sfmc-inspector.js</span></div>
+          <div class="mock-line"><span class="mock-k">const</span> inspector = <span class="mock-k">new</span> <span class="mock-s">SFMCInspector</span>();</div>
+          <div class="mock-line"><span class="mock-c">// Auth via session proxy</span></div>
+          <div class="mock-line">inspector.<span class="mock-s">auth</span>();</div>
+          <div class="mock-line">&nbsp;</div>
+          <div class="mock-line"><span class="mock-c">// Parallel DE search</span></div>
+          <div class="mock-line">inspector.<span class="mock-s">searchDE</span>(<span class="mock-k">'a'</span>);</div>
+          <div class="mock-line"><span class="mock-c">// → 36 parallel calls</span></div>
+          <div class="mock-line"><span class="mock-c">// → deduplicated</span></div>
+          <div class="mock-line">&nbsp;</div>
+          <div class="mock-line"><span class="mock-c">// Lint SQL & AMPScript</span></div>
+          <div class="mock-line">inspector.<span class="mock-s">lint</span>(query);</div>
+          <div class="mock-line"><span class="mock-c">// ✓ 10 rules checked</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-card">
+      <div class="contact-inner-wrap">
+        <p class="section-label" style="justify-content:center;"><span data-lang-it>Contatti</span><span data-lang-en>Contact</span></p>
+        <h2 class="contact-title">
+          <span data-lang-it class="block">Un progetto SFMC<br/>da <em>far decollare?</em></span>
+          <span data-lang-en class="block">An SFMC project<br/>to <em>launch?</em></span>
+        </h2>
+        <p class="contact-sub">
+          <span data-lang-it>Consulenze, implementazioni, formazione, audit. Rispondo entro 24 ore a ogni richiesta seria.</span>
+          <span data-lang-en>Consulting, implementation, training, audits. I reply within 24 hours to any serious request.</span>
+        </p>
+        <a href="mailto:vincenzo.boellis@gmail.com" class="contact-email">vincenzo.boellis@gmail.com</a>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/vincenzo-boellis" target="_blank" class="contact-link">LinkedIn ↗</a>
+          <a href="https://github.com/vincenzoboellis" target="_blank" class="contact-link">GitHub ↗</a>
+          <a href="https://x.com/vincenzoboellis" target="_blank" class="contact-link">X ↗</a>
+          <a href="https://trailblazer.me/id/vincenzoboellis" target="_blank" class="contact-link">Trailhead ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Vincenzo Boellis · <span data-lang-it>Freelance Salesforce Marketing Cloud Architect</span><span data-lang-en>Freelance Salesforce Marketing Cloud Architect</span></p>
+  <p style="margin-top:.4rem;font-size:.72rem;">Caserta, <span data-lang-it>Italia</span><span data-lang-en>Italy</span> — <a href="https://www.linkedin.com/in/vincenzo-boellis" target="_blank">LinkedIn</a> · <a href="https://github.com/vincenzoboellis" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+  (function(){
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('[data-lang-set]');
+
+    function setLang(lang){
+      root.setAttribute('lang', lang);
+      buttons.forEach(function(btn){
+        btn.classList.toggle('active', btn.getAttribute('data-lang-set') === lang);
+      });
+      try { sessionStorage.setItem('preferred-lang', lang); } catch(e){}
+    }
+
+    // Init: read from sessionStorage, default 'it'
+    var saved = 'it';
+    try { saved = sessionStorage.getItem('preferred-lang') || 'it'; } catch(e){}
+    setLang(saved);
+
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        setLang(btn.getAttribute('data-lang-set'));
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
