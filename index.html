@@ -1380,8 +1380,8 @@
           <span class="proj-tag">★ LIVE ON CHROME WEB STORE · 4.7</span>
           <h3>SFMC <em>Inspector</em></h3>
           <p class="proj-desc">
-            <span data-lang-it>Una Chrome Extension costruita da zero per potenziare il workflow dei professionisti SFMC. Esplora Data Extensions in parallelo, mappa Automazioni e Journey, valida SQL e AMPScript con linter integrati, cerca globalmente nell'org con un comando <strong style="color:var(--text);">⌘K</strong>. Autenticazione via proxy session-based, senza credenziali esplicite.</span>
-            <span data-lang-en>A Chrome Extension built from scratch to empower the SFMC professional workflow. Explore Data Extensions in parallel, map Automations and Journeys, validate SQL and AMPScript with built-in linters, search globally across the org with a <strong style="color:var(--text);">⌘K</strong> command. Session-based proxy authentication, no explicit credentials required.</span>
+            <span data-lang-it>Una Chrome Extension costruita da zero per potenziare il workflow dei professionisti SFMC. Sfoglia <strong style="color:var(--text);">Data Extensions, Automazioni e Journey</strong> della tua org direttamente dal browser, con conteggio righe e ricerca rapida. Include un <strong style="color:var(--text);">Linter</strong> per validare SQL e AMPScript. Autenticazione automatica via sessione SFMC: nessuna credenziale da inserire.</span>
+            <span data-lang-en>A Chrome Extension built from scratch to empower the SFMC professional workflow. Browse <strong style="color:var(--text);">Data Extensions, Automations and Journeys</strong> in your org directly from the browser, with row counts and quick search. Includes a built-in <strong style="color:var(--text);">Linter</strong> to validate SQL and AMPScript. Automatic authentication via SFMC session: no credentials required.</span>
           </p>
           <div class="proj-pills">
             <span class="proj-pill">Chrome Extension</span>
@@ -1402,19 +1402,20 @@
         </div>
         <div class="proj-mockup">
           <div class="mock-dots"><span></span><span></span><span></span></div>
-          <div class="mock-line"><span class="mock-c">// sfmc-inspector.js</span></div>
+          <div class="mock-line"><span class="mock-c">// sfmc-inspector</span></div>
           <div class="mock-line"><span class="mock-k">const</span> inspector = <span class="mock-k">new</span> <span class="mock-s">SFMCInspector</span>();</div>
-          <div class="mock-line"><span class="mock-c">// Auth via session proxy</span></div>
-          <div class="mock-line">inspector.<span class="mock-s">auth</span>();</div>
           <div class="mock-line">&nbsp;</div>
-          <div class="mock-line"><span class="mock-c">// Parallel DE search</span></div>
-          <div class="mock-line">inspector.<span class="mock-s">searchDE</span>(<span class="mock-k">'a'</span>);</div>
-          <div class="mock-line"><span class="mock-c">// → 36 parallel calls</span></div>
-          <div class="mock-line"><span class="mock-c">// → deduplicated</span></div>
+          <div class="mock-line"><span class="mock-c">// Auto-auth via session</span></div>
+          <div class="mock-line">inspector.<span class="mock-s">connect</span>();</div>
+          <div class="mock-line"><span class="mock-c">// → mc.s51.exacttarget.com</span></div>
+          <div class="mock-line">&nbsp;</div>
+          <div class="mock-line"><span class="mock-c">// Load org assets</span></div>
+          <div class="mock-line">inspector.<span class="mock-s">load</span>(<span class="mock-k">'dataExtensions'</span>);</div>
+          <div class="mock-line"><span class="mock-c">// → 194 DEs loaded</span></div>
           <div class="mock-line">&nbsp;</div>
           <div class="mock-line"><span class="mock-c">// Lint SQL & AMPScript</span></div>
           <div class="mock-line">inspector.<span class="mock-s">lint</span>(query);</div>
-          <div class="mock-line"><span class="mock-c">// ✓ 10 rules checked</span></div>
+          <div class="mock-line"><span class="mock-c">// ✓ validated</span></div>
         </div>
       </div>
     </div>
